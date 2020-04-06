@@ -103,12 +103,38 @@ class TestimonialsController extends Controller
      * @param  \App\Testimonials  $testimonials
      * @return \Illuminate\Http\Response
      */
-    public function show(Testimonials $testimonials)
+    public function show($id)
     {
-        return 1;
+        $testimonials=Testimonials::where('id',$id);
+        if (count($testimonials->get()) === 0) {
+            return response()->json([
+                'status' => "failure",
+                'message' => 'Testimonoals not found'
+            ], 404);
+        }else{
+            return response()->json([
+                'status' => "success",
+                'data' => $testimonials->get()
+            ], 200);
+
+        }
+
         //
     }
-
+    public function getallreview(){
+        $testimonials=Testimonials::all();
+        // if (count($testimonials) === 0) //No album present
+        //     {
+        //         return response()->json([
+        //             'status' => "Success",
+        //             'message' => 'Testimonials not found'
+        //         ], 200);
+        //     }
+        return response()->json([
+            'status' => "success",
+            'data' => $testimonials
+        ], 200);
+    }
     /**
      * Show the form for editing the specified resource.
      *

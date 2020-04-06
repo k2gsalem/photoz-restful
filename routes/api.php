@@ -63,8 +63,11 @@ $middleware = ['api'];
 if (\Request::header('Authorization'))
    $middleware = array_merge(['auth:api']);
 Route::group(['middleware' => $middleware], function () {
+    Route::get('/getallreview','Api\TestimonialsController@getallreview');
     Route::get('/getallalbums','Api\AlbumController@getallalbums');
     Route::get('/user/getprofile','Api\UserController@getprofile');
+
+    Route::get('/review/{id}', 'Api\TestimonialsController@show');
     Route::get('/users/{id}', 'Api\UserController@show');   //with auth -> return all albums, guest-> return only public albums
     Route::get('/albums/{id}', 'Api\AlbumController@show'); //with auth -> return all photos, guest-> return only public photos
     Route::get('/photos/{id}', 'Api\PhotoController@show'); //with auth -> access private photo
