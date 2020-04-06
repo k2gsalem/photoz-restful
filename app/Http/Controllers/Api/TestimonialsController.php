@@ -203,39 +203,28 @@ class TestimonialsController extends Controller
 
             try {
                 //Get exact album to be deleted
-                $album = Album::where('id', $id);
+                $testimonials = Testimonials::where('id', $id);
 
-                if (count($album->get()) === 0)
+                if (count($testimonials->get()) === 0)
                     return response()->json([
                         'status' => "failure",
-                        'message' => 'Album not found'
+                        'message' => 'Testimonials not found'
                     ], 404);
 
-                //Get associated user
-                $user = $album->pluck('user_id')->first();
                 //Get cover photo
-                $cover = $album->pluck('cover_picture')->first();
+                $cover = $testimonials->pluck('testimonial_image')->first();
 
                 //Verify user
-                if (auth()->user()->id === $user) {
+
                     //Delete photos associated with album
-                    $photos = Photo::where('album_id', $id);
-                    foreach ($photos->get() as $photo) {
-                        $request = Request::create('/api/admin/gallery/deletephotos/' . $photo['id'], 'DELETE');
-                        $response = app()->handle($request); //Route::dispatch($request);
-                    }
+
                     //Delete from Storage
                     if ($cover !== 'noimage.jpg') {
-                        Storage::delete('/public/cover_pictures/' . $cover);
+                        Storage::delete('/public/testimonials_picture/' . $cover);
                     }
-                    $album = $album->delete();
-                    return response()->json(["status"=>"Success","message"=>"Album Deleted"], 200);
-                } else {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Not Authorized'
-                    ], 401);
-                }
+                    $testimonials = $testimonials->delete();
+                    return response()->json(["status"=>"Success","message"=>"Testimonials Deleted"], 200);
+
             } catch (\Exception $e) {
                 return response()->json([
                     'success' => false,
@@ -247,4 +236,4 @@ class TestimonialsController extends Controller
         }
     }
     }
-}
+

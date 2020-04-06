@@ -177,7 +177,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\xampp\\htdocs\\photoz-restful\\storage\\framework/cache/data',
+        'path' => '/var/www/html/photoz-restful/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -313,12 +313,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\photoz-restful\\storage\\app',
+        'root' => '/var/www/html/photoz-restful/storage/app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\photoz-restful\\storage\\app/public',
+        'root' => '/var/www/html/photoz-restful/storage/app/public',
         'url' => 'photoz.local/storage',
         'visibility' => 'public',
       ),
@@ -364,13 +364,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\xampp\\htdocs\\photoz-restful\\storage\\logs/laravel.log',
+        'path' => '/var/www/html/photoz-restful/storage/logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\xampp\\htdocs\\photoz-restful\\storage\\logs/laravel.log',
+        'path' => '/var/www/html/photoz-restful/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -434,7 +434,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\xampp\\htdocs\\photoz-restful\\resources\\views/vendor/mail',
+        0 => '/var/www/html/photoz-restful/resources/views/vendor/mail',
       ),
     ),
     'log_channel' => NULL,
@@ -527,7 +527,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\xampp\\htdocs\\photoz-restful\\storage\\framework/sessions',
+    'files' => '/var/www/html/photoz-restful/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -547,9 +547,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\xampp\\htdocs\\photoz-restful\\resources\\views',
+      0 => '/var/www/html/photoz-restful/resources/views',
     ),
-    'compiled' => 'C:\\xampp\\htdocs\\photoz-restful\\storage\\framework\\views',
+    'compiled' => '/var/www/html/photoz-restful/storage/framework/views',
   ),
   'debug-server' => 
   array (
