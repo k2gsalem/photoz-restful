@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Testimonials;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Testimonials;
+
+
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Support\Facades\Storage;
 
 class TestimonialsController extends Controller
 {
@@ -13,20 +18,20 @@ class TestimonialsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
+    // public function index()
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+    // public function create()
+    // {
+    //     //
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -36,6 +41,59 @@ class TestimonialsController extends Controller
      */
     public function store(Request $request)
     {
+
+        if (auth()->user()->id == 1) {
+
+
+            try {
+                //Validate the data
+                try {
+                    $this->validate($request, [
+                        'testimonial_name' => ['required', 'string'],
+                        'testimonial_title' => ['required', 'string'],
+                        'testimonial_desc' => ['nullable', 'string'],
+                        'testimonial_date' => ['required', 'date', 'date_format:Y-m-d'],
+                        'testimonial_image' => ['required', 'image', 'max:1999'],
+                    ]);
+                } catch (\Illuminate\Validation\ValidationException $e) {
+                    return response()->json($e->errors(), 400);
+                }
+                $file_to_store = 'noimage.jpg'; //default image
+
+                if ($request->testimonial_image !== null) {
+                    $filename = $request->file('testimonial_image')->getClientOriginalName();
+                    $file_first = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = $request->file('testimonial_image')->getClientOriginalExtension();
+
+                    $file_to_store = $file_first . '_' . time() . '.' . $extension;
+                    $path = $request->file('testimonial_image')->storeAs('public/testimonials_picture', $file_to_store);
+                }
+                // return dd($request);
+                // $user_id = auth()->user()->id;
+                $testimonoals = Testimonials::create([
+                    'testimonial_name' => $request->testimonial_name,
+                    'testimonial_title' => $request->testimonial_title,
+                    'testimonial_desc' => $request->testimonial_desc,
+                    'testimonial_image' => $file_to_store,
+                    'testimonial_date' => $request->testimonial_date,
+                ]);
+
+                return response()->json([
+                    'status' => "Success",
+                    'message' => " Testimonial Created Successfully",
+                ], 201);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+        } else {
+            return response()->json(["status" => "failure", "message" => "user is not Admin"], 400);
+        }
+
+
+
         //
     }
 
@@ -47,6 +105,7 @@ class TestimonialsController extends Controller
      */
     public function show(Testimonials $testimonials)
     {
+        return 1;
         //
     }
 
@@ -56,10 +115,10 @@ class TestimonialsController extends Controller
      * @param  \App\Testimonials  $testimonials
      * @return \Illuminate\Http\Response
      */
-    public function edit(Testimonials $testimonials)
-    {
-        //
-    }
+    // public function edit(Testimonials $testimonials)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -68,9 +127,66 @@ class TestimonialsController extends Controller
      * @param  \App\Testimonials  $testimonials
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Testimonials $testimonials)
+    public function update(Request $request, $id)
     {
-        //
+        if (auth()->user()->id == 1) {
+
+
+            try {
+                $testimonials = Testimonials::where('id', $id);
+                    // ->where('user_id', auth()->user()->id);
+                if (count($testimonials->get()) === 0)
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Testimonial not found or Unauthorized'
+                    ], 400);
+
+                $old_photo = Testimonials::where('id', $id)->pluck('testimonial_image')->first();
+                try {
+                    $this->validate($request, [
+                        'testimonial_name' => ['required', 'string'],
+                        'testimonial_title' => ['required', 'string'],
+                        'testimonial_desc' => ['nullable', 'string'],
+                        'testimonial_date' => ['required', 'date', 'date_format:Y-m-d'],
+                        'testimonial_image' => ['required', 'image', 'max:1999'],
+                    ]);
+                } catch (\Illuminate\Validation\ValidationException $e) {
+                    return response()->json($e->errors(), 400);
+                }
+                $file_to_store = $old_photo;
+
+                if ($request->testimonial_image !== null) {
+                    Storage::delete('public/testimonials_pictures/' . $old_photo);
+                    $filename = $request->file('testimonial_image')->getClientOriginalName();
+                    $file_first = pathinfo($filename, PATHINFO_FILENAME);
+                    $extension = $request->file('testimonial_image')->getClientOriginalExtension();
+
+                    $file_to_store = $file_first . '_' . time() . '.' . $extension;
+                    $path = $request->file('testimonial_image')->storeAs('public/testimonials_picture', $file_to_store);
+                }
+                // return dd($request);
+                // $user_id = auth()->user()->id;
+                $testimonoals = Testimonials::where('id', $id)->update([
+                    'testimonial_name' => $request->testimonial_name,
+                    'testimonial_title' => $request->testimonial_title,
+                    'testimonial_desc' => $request->testimonial_desc,
+                    'testimonial_image' => $file_to_store,
+                    'testimonial_date' => $request->testimonial_date,
+                ]);
+
+                return response()->json([
+                    'status' => "Success",
+                    'message' => " Testimonial Updated Successfully",
+                ], 201);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+        } else {
+            return response()->json(["status" => "failure", "message" => "user is not Admin"], 400);
+        }
     }
 
     /**
@@ -79,8 +195,56 @@ class TestimonialsController extends Controller
      * @param  \App\Testimonials  $testimonials
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Testimonials $testimonials)
+    public function destroy($id)
     {
-        //
+        if (auth()->user()->id == 1) {
+
+
+
+            try {
+                //Get exact album to be deleted
+                $album = Album::where('id', $id);
+
+                if (count($album->get()) === 0)
+                    return response()->json([
+                        'status' => "failure",
+                        'message' => 'Album not found'
+                    ], 404);
+
+                //Get associated user
+                $user = $album->pluck('user_id')->first();
+                //Get cover photo
+                $cover = $album->pluck('cover_picture')->first();
+
+                //Verify user
+                if (auth()->user()->id === $user) {
+                    //Delete photos associated with album
+                    $photos = Photo::where('album_id', $id);
+                    foreach ($photos->get() as $photo) {
+                        $request = Request::create('/api/admin/gallery/deletephotos/' . $photo['id'], 'DELETE');
+                        $response = app()->handle($request); //Route::dispatch($request);
+                    }
+                    //Delete from Storage
+                    if ($cover !== 'noimage.jpg') {
+                        Storage::delete('/public/cover_pictures/' . $cover);
+                    }
+                    $album = $album->delete();
+                    return response()->json(["status"=>"Success","message"=>"Album Deleted"], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Not Authorized'
+                    ], 401);
+                }
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+        } else {
+            return response()->json(["status" => "failure", "message" => "user is not Admin"], 400);
+        }
+    }
     }
 }

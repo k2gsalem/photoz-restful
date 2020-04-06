@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Album;
 use App\Observers\AlbumObserver;
 use App\Observers\Photoobserver;
+use App\Observers\TestimonialsObserver;
 use App\Photo;
+use App\Testimonials;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -36,5 +38,6 @@ class EventServiceProvider extends ServiceProvider
         //
         Album::observe(AlbumObserver::class);
         Photo::observe(Photoobserver::class);
+        Testimonials::observe(TestimonialsObserver::class);
     }
 }

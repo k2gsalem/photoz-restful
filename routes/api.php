@@ -49,6 +49,12 @@ Route::group(['middleware' => 'auth:api'], function(){  //Authenticated only
     Route::post('/admin/gallery/createphotos','Api\PhotoController@store');   //upload new photo
     Route::put('/admin/gallery/updatephotos/{id}','Api\PhotoController@update'); //update photo with id
     Route::delete('/admin/gallery/deletephotos/{id}','Api\PhotoController@destroy'); //delele photo with id
+
+    Route::post('/admin/testimonial/writereview', 'Api\TestimonialsController@store');
+    Route::put('/admin/testimonial/editreview/{id}', 'Api\TestimonialsController@update');
+    Route::delete('/admin/testimonial/deleteReview/{id}', 'Api\TestimonialsController@destroy');//dek
+
+
 });
 
 
