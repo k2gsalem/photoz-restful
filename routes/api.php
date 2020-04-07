@@ -16,7 +16,40 @@ use Illuminate\Http\Request;
 //Retruns details of Current authorized user
 Route::get('/details', 'Api\PassportController@details')->middleware('auth:api');
 
+Route::get('/config-clear', function() {
+    $status = Artisan::call('config:clear');
+    return '<h1>Configurations cleared</h1>';
+});
+Route::get('/cache-clear', function() {
+    $status = Artisan::call('cache:clear');
+    return '<h1>Cache cleared</h1>';
+});
+Route::get('/config-cache', function() {
+    $status = Artisan::call('config:cache');
+    return '<h1>Configurations cache cleared</h1>';
+});
 
+Route::get('/storage-link', function() {
+    $status= exec('cd .. && dir && rm public/storage');
+    $status = Artisan::call('storage:link');
+    return $status;
+});
+
+Route::get('/passport-install', function() {
+   // $status= exec('cd .. && dir && rm public/storage');
+    $status = Artisan::call('passport:install');
+    return $status;
+});
+Route::get('/migrate-fresh', function() {
+ //   $status= exec('cd .. && dir && rm public/storage');
+    $status = Artisan::call('migrate:fresh');
+    return $status;
+});
+Route::get('/composer-install', function() {
+     $status= exec('cd .. && dir && composer install');
+     //$status = Artisan::call('passport:install');
+     return $status;
+ });
 //Login and Register
 Route::post('/login', 'Api\PassportController@login');
 // Route::post('/register', 'Api\PassportController@register');
