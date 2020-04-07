@@ -18,7 +18,9 @@ class CreatePhotosTable extends Migration
 
             $table->unsignedBigInteger('album_id');
             $table->foreign('album_id')->references('id')->on('albums');
-            $table->string('photo');
+            $table->string('photo')->nullable();
+            $table->string('path',300)->nullable();
+            $table->integer('type')->default(1)->unsigned();
             $table->mediumText('photo_description')->nullable();
             $table->integer('privacy')->default(1)->unsigned();
             $table->unsignedBigInteger('created_by');

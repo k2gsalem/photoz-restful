@@ -8,7 +8,7 @@ use App\Album;
 class Photo extends Model
 {
     protected $fillable = [
-        'photo', 'album_id', 'photo_description','privacy'
+        'photo', 'album_id', 'photo_description','privacy','type','path'
     ];
     public function album()
     {

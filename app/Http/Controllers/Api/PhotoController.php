@@ -47,6 +47,7 @@ class PhotoController extends Controller
                         'photo_description' => ['nullable', 'string', 'nullable'],
                         'privacy' => ['required', 'integer', 'between:1,3'],
                         'photo' => ['required', 'image', 'max:1999'],
+                        'type' => ['required','integer','size:1'],
                     ]);
                 } catch (\Illuminate\Validation\ValidationException $e) {
                     return \response($e->errors(), 400);
@@ -64,6 +65,7 @@ class PhotoController extends Controller
                     'album_id' => $request->album_id,
                     'privacy' => $request->privacy,
                     'photo' => $file_to_store,
+                    'type' =>$request->type,
                     //'geo_location' => $ Get from meta_data
                     //'taken_on' => $Get from meta data
                 ]);
@@ -92,7 +94,7 @@ class PhotoController extends Controller
 
         try {
             //Get Album from $id
-            $album = Photo::where('id', $id)->pluck('album_id')->first();
+            $album = Photo::where('id', $id)->where('type', 1)->pluck('album_id')->first();
             //Get Associated User
             $user = Album::where('id', $album)->pluck('user_id')->first();
 
@@ -112,6 +114,8 @@ class PhotoController extends Controller
                     'photo_description' => ['nullable', 'string'],
                     'privacy' => ['required', 'integer', 'between:1,3'],
                     'photo' => ['image', 'max:1999'],
+                    'type' => ['required','integer', 'size:1'],
+
                 ]);
             } catch (\Illuminate\Validation\ValidationException $e) {
                 return \response($e->errors(), 400);
@@ -133,7 +137,8 @@ class PhotoController extends Controller
             $photo = Photo::where('id', $id)->update([
                 'photo_description' => $request->photo_description,
                 'privacy' => $request->privacy,
-                'photo' => $file_to_store
+                'photo' => $file_to_store,
+                'type' => $request->type,
             ]);
 
             return response()->json(["ststus"=>"Success","message"=>"Photo Updated Successfully"], 200);
@@ -152,7 +157,7 @@ class PhotoController extends Controller
     public function show($id)   //GET
     {
         try {
-            $photo = Photo::where('id', $id); //match photo id
+            $photo = Photo::where('id', $id)->where('type', 1); //match photo id
             //$photo = Photo::find($id);
             if (count($photo->get()) === 0) {
                 return response()->json([

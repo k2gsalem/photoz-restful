@@ -50,6 +50,10 @@ Route::group(['middleware' => 'auth:api'], function(){  //Authenticated only
     Route::put('/admin/gallery/updatephotos/{id}','Api\PhotoController@update'); //update photo with id
     Route::delete('/admin/gallery/deletephotos/{id}','Api\PhotoController@destroy'); //delele photo with id
 
+    Route::post('/admin/gallery/createvideos','Api\VideoController@store');   //upload new photo
+    Route::put('/admin/gallery/updatevideos/{id}','Api\VideoController@update'); //update photo with id
+    Route::delete('/admin/gallery/deletevideos/{id}','Api\VideoController@destroy'); //delele photo with id
+
     Route::post('/admin/testimonial/writereview', 'Api\TestimonialsController@store');
     Route::put('/admin/testimonial/editreview/{id}', 'Api\TestimonialsController@update');
     Route::delete('/admin/testimonial/deleteReview/{id}', 'Api\TestimonialsController@destroy');//dek
@@ -71,7 +75,7 @@ Route::group(['middleware' => $middleware], function () {
     Route::get('/users/{id}', 'Api\UserController@show');   //with auth -> return all albums, guest-> return only public albums
     Route::get('/albums/{id}', 'Api\AlbumController@show'); //with auth -> return all photos, guest-> return only public photos
     Route::get('/photos/{id}', 'Api\PhotoController@show'); //with auth -> access private photo
-
+    Route::get('/videos/{id}', 'Api\VideoController@show');
 });
 
 
