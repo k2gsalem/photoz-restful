@@ -79,6 +79,7 @@ Route::group(['middleware' => 'auth:api'], function(){  //Authenticated only
 
 
     //Photos
+    Route::post('/admin/gallery/createBulkPhotos','Api\PhotoController@storebulk');
     Route::post('/admin/gallery/createPhotos','Api\PhotoController@store');   //upload new photo
     Route::put('/admin/gallery/updatePhotos/{id}','Api\PhotoController@update'); //update photo with id
     Route::delete('/admin/gallery/deletePhotos/{id}','Api\PhotoController@destroy'); //delele photo with id
