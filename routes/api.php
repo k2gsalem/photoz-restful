@@ -30,23 +30,31 @@ Route::get('/config-cache', function() {
 });
 
 Route::get('/storage-link', function() {
-    $status= exec('cd .. && dir && rm public/storage');
+    $status= shell_exec('cd .. && rm public/storage');
     $status = Artisan::call('storage:link');
     return $status;
 });
 
 Route::get('/passport-install', function() {
+     $status= shell_exec('cd .. && php artisan passport:install --force');
+    // $status= exec('dir');
    // $status= exec('cd .. && dir && rm public/storage');
-    $status = Artisan::call('passport:install');
+   // $status = Artisan::call('passport:install');
     return $status;
 });
 Route::get('/migrate-fresh', function() {
  //   $status= exec('cd .. && dir && rm public/storage');
-    $status = Artisan::call('migrate:fresh');
+     $status= shell_exec('cd .. && php artisan migrate:fresh --force');
     return $status;
 });
 Route::get('/composer-install', function() {
-     $status= exec('cd .. && dir && composer install');
+     $status= exec('cd .. && composer install');
+     //$status = Artisan::call('passport:install');
+     return $status;
+ });
+
+ Route::get('/composer-update', function() {
+     $status= exec('cd .. && composer update');
      //$status = Artisan::call('passport:install');
      return $status;
  });
