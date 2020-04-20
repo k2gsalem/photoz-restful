@@ -46,7 +46,7 @@ class PhotoController extends Controller
                     $this->validate($request, [
                         'photo_description' => ['nullable', 'string', 'nullable'],
                         'privacy' => ['required', 'integer', 'between:1,3'],
-                        'photo' => ['required', 'image', 'max:1999'],
+                        'photo' => ['required', 'image', 'max:6144'],
                         'type' => ['required','integer','size:1'],
                     ]);
                 } catch (\Illuminate\Validation\ValidationException $e) {
@@ -117,7 +117,7 @@ class PhotoController extends Controller
                     $this->validate($request, [
                         'photo_description' => ['nullable', 'string', 'nullable'],
                         'privacy' => ['required', 'integer', 'between:1,3'],
-                        'photo.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                        'photo.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:6144',
                         'type' => ['required','integer','size:1'],
                     ]);
                 } catch (\Illuminate\Validation\ValidationException $e) {
@@ -210,7 +210,7 @@ class PhotoController extends Controller
                 $this->validate($request, [
                     'photo_description' => ['nullable', 'string'],
                     'privacy' => ['required', 'integer', 'between:1,3'],
-                    'photo' => ['image', 'max:1999'],
+                    'photo' => ['image', 'max:6144'],
                     'type' => ['required','integer', 'size:1'],
 
                 ]);

@@ -110,7 +110,9 @@ class AlbumController extends Controller
 
                 if ($request->cover_picture != null) {
                     //Delete Old Image
-                    Storage::delete('public/cover_pictures/' . $old_photo);
+                    if($old_photo!='noimage.jpg'){
+                        Storage::delete('public/cover_pictures/' . $old_photo);
+                    }
                     //Save the new image
                     $filename = $request->file('cover_picture')->getClientOriginalName();
                     $file_first = pathinfo($filename, PATHINFO_FILENAME);
