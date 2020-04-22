@@ -100,6 +100,9 @@ Route::group(['middleware' => 'auth:api'], function(){  //Authenticated only
     Route::put('/admin/testimonial/editReview/{id}', 'Api\TestimonialsController@update');
     Route::delete('/admin/testimonial/deleteReview/{id}', 'Api\TestimonialsController@destroy');//dek
 
+    Route::post('/admin/testimonial/createVideos','Api\TestimonialVideoController@store');   //upload new photo
+    Route::put('/admin/testimonial/updateVideos/{id}','Api\TestimonialVideoController@update'); //update photo with id
+    Route::delete('/admin/testimonial/deleteVideos/{id}','Api\TestimonialVideoController@destroy'); //delele photo with id
 
 });
 
