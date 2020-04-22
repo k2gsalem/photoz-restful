@@ -277,8 +277,14 @@ class AlbumController extends Controller
                     //Delete photos associated with album
                     $photos = Photo::where('album_id', $id);
                     foreach ($photos->get() as $photo) {
-                        $request = Request::create('/api/admin/gallery/deletephotos/' . $photo['id'], 'DELETE');
-                        $response = app()->handle($request); //Route::dispatch($request);
+                        if($photo['type']==1){
+                            $request = Request::create('/api/admin/gallery/deletephotos/' . $photo['id'], 'DELETE');
+                            $response = app()->handle($request); //Route::dispatch($request);
+                        }else{
+                            $request = Request::create('/api/admin/gallery/deleteVideos/' . $photo['id'], 'DELETE');
+                            $response = app()->handle($request); //Route::dispatch($request);
+                        }
+
                     }
                     //Delete from Storage
                     if ($cover !== 'noimage.jpg') {
